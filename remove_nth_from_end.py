@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, data):
+    def _init_(self, data):
         self.data = data
         self.next = None
 
@@ -7,16 +7,19 @@ class Node:
 def remove_nth_from_end(head, n):
     dummy = Node(0)
     dummy.next = head
-    first = second = head  # ❌ Both start from head, should start first from dummy
+    first = second = dummy  # ✅ Both start from dummy
 
-    for _ in range(n):
-        first = first.next
+    # Move first pointer n+1 steps ahead
+    for _ in range(n + 1):
+        if first:
+            first = first.next
 
-    while first.next:  # ❌ Fails if n == length of list
+    while first:
         first = first.next
         second = second.next
 
-    second.next = second.next.next
+    # ✅ Safely remove target node
+    second.next = second.next.next if second.next else None
     return dummy.next
 
 
@@ -34,4 +37,4 @@ head.next.next = Node(3)
 head.next.next.next = Node(4)
 head.next.next.next.next = Node(5)
 
-print_list(remove_nth_from_end(head, 2))  # Expected 1 → 2 → 3 → 5
+print_list(remove_nth_from_end(head, 2))
